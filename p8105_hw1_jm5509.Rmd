@@ -1,0 +1,73 @@
+---
+title: "p8105_hw1_jm5509"
+author: "Echo"
+date: "2022-09-19"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Problem 1
+
+This a short description of the penguins dataset. The function of str() and 
+summary() illustrate the names and values of important variables.
+
+```{r penguins}
+data('penguins',package='palmerpenguins')
+str(penguins) 
+# Shows the length of the tibble, numeric variables and int varibles; 
+# and the levels of the factor variables(including species,island and sex)
+summary(penguins)
+# Shows the number of the factor variables, and basic statistical 
+# values of numeric variables
+
+nrow(penguins)
+ncol(penguins)
+
+mean(penguins$flipper_length_mm)
+
+library(tidyverse)
+ggplot(penguins,aes(x=bill_length_mm,y=flipper_length_mm, color=species))+geom_point()
+ggsave('penguins.pdf')
+```
+
+## Problem 2
+
+This solution is displayed as follows. In this case, we create a data frame 
+comprised of 4 variables with different data types. Among them, only the numeric
+and the logical value could be taken the mean value.
+
+```{r dataframe}
+library(tidyverse)
+df = 
+tibble(
+norm=rnorm(n=10),
+logical=norm>0,
+character=c('a','b','c','d','e','f','g','h','i','j'),
+factor=as.factor(c(rep('paper',3),rep('scissors',4),rep('rock',3)))
+)
+
+mean(df %>% pull(1))
+mean(df %>% pull(2))
+mean(df %>% pull(3))
+mean(df %>% pull(4))
+
+```
+
+We further convert three other variables to numeric ones. It turns out that only 
+logical and factor vectors could be converted.
+Logical values could be converted from TRUE/FALSE to 1/0. That could explain why
+it can be taken the mean value.
+Factor values could be converted to its corresponding order when being converted. 
+Character values are converted to "NA"s. However, if the character values is 
+converted from numeric values, then it could be converted back to numeric values.
+
+```{r asnumeric, eval=FALSE}
+as.numeric(df %>% pull(2)) # logical
+as.numeric(df %>% pull(3)) # character
+as.numeric(df %>% pull(4)) # factor
+```
